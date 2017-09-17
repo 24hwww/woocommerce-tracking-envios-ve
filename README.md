@@ -1,2 +1,2 @@
-# Rastreo/Tracking de Envios en Venezuela para Woocommerce/Wordpress
+# Rastreo/Tracking de Envios en Venezuela para Woocommerce-Wordpress
 Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros...
