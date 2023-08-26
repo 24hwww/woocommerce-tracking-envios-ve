@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Tracking Envios Venezuela
  * Plugin URI: https://github.com/24hwww/woocommerce-tracking-envios-ve/
- * Description: Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros...
+ * Description: Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros. Podras insertar en cada orden de pedido de tus cliente el codigo de seguimiento o tracking de empresas de encomiendas Venezolanas.
  * Version: 1.0
  * Author: Leonardo Reyes
  * Author URI: https://github.com/24hwww/
