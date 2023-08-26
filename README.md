@@ -1,2 +1,2 @@
 # Rastreo/Tracking de Envios en Venezuela para Woocommerce-Wordpress
-Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros. Podras insertar en cada orden de pedido de tus cliente el codigo de seguimiento o tracking de empresas de encomiendas Venezolanas.
+Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros. Podras insertar en cada orden de pedido de tus cliente el código de seguimiento o tracking de empresas de encomiendas Venezolanas.
