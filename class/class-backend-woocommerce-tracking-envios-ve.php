@@ -27,6 +27,8 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
 
     add_action( 'add_meta_boxes', [$instance,'add_shop_order_meta_boxes_func']);
 
+    add_action( 'woocommerce_process_shop_order_meta', [$instance,'save_shop_order_meta_boxes_func'], 10, 2 );
+
     }
 
     public function section_active_wc_tracking_envios_ve_func($settings_tab){
@@ -170,9 +172,32 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
             'description' => 'Indique el código del envio.',
         ), $codigo );
 
+        echo sprintf('<input type="hidden" name="wc_tracking_ve_nonce" value="%s" />',$nonce);
+
         $output = ob_get_contents();
         ob_end_clean();
         echo $output;
+    }
+
+    public function save_shop_order_meta_boxes_func($order_id, $post){
+
+        $wc_tracking_ve_nonce = isset($_REQUEST['wc_tracking_ve_nonce']) ? $_REQUEST['wc_tracking_ve_nonce'] : '';
+
+        if ( ! wp_verify_nonce($wc_tracking_ve_nonce) ) {
+            return $order_id;
+        }
+
+        $order = wc_get_order($order_id);
+
+        $wc_tracking_ve_empresa = isset($_REQUEST['wc_tracking_ve_empresa']) ? sanitize_text_field($_REQUEST['wc_tracking_ve_empresa']) : '';
+        $wc_tracking_ve_codigo = isset($_REQUEST['wc_tracking_ve_codigo']) ? sanitize_text_field($_REQUEST['wc_tracking_ve_codigo']) : '';
+
+        $order->update_meta_data('wc_tracking_ve_empresa', $wc_tracking_ve_empresa);
+
+        $order->update_meta_data('wc_tracking_ve_codigo', $wc_tracking_ve_codigo);
+
+        $order->save();
+
     }
 
 }
