@@ -25,6 +25,8 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
     public static function init() {
     $instance = self::instance();
 
+    add_filter('plugin_action_links', [$instance,'wc_add_plugin_page_settings_link_func'], 10, 2 );    
+
     add_filter("woocommerce_get_sections_{$instance->id_wc_setting}" , [$instance,'section_active_wc_tracking_envios_ve_func']);
 
     add_action( "woocommerce_get_settings_{$instance->id_wc_setting}", [$instance,'section_setting_wc_tracking_envios_ve_func'],10,2);
@@ -36,6 +38,26 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
     add_filter('woocommerce_new_order_note_data', [$instance,'woocommerce_new_order_note_data_func'], 10, 2 );    
 
     }
+
+    public function wc_add_plugin_page_settings_link_func($links,$file){
+        if ( $file !== WC_ENVIOS_VE_BASE ) {
+            return $links;
+        }
+        $setting_url = add_query_arg( array(
+            'page' => 'wc-settings',
+            'tab' => 'shipping',
+            'section' => WC_ENVIOS_VE_DOMAIN,
+        ), admin_url('admin.php') );
+
+        $settings_link = sprintf('<a href="%s">%s</a>', esc_url($setting_url),__('Settings'));
+
+        array_push(
+            $links,
+            $settings_link
+        );
+
+	    return $links;
+    }    
 
     public function section_active_wc_tracking_envios_ve_func($settings_tab){
         $settings_tab[WC_ENVIOS_VE_DOMAIN] = __( WC_ENVIOS_VE_TITLE );
@@ -80,7 +102,7 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
 			array(
 				'name' => __( WC_ENVIOS_VE_TITLE ),
 				'type' => 'title',
-				'desc' => __( 'Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros. Podras insertar en cada orden de pedido de tus cliente el código de seguimiento o tracking de empresas de encomiendas Venezolanas.' ),
+				'desc' => __( 'Permite a tus clientes rastrear sus compras cuando realices el envio por zoom, tealca, domesa, entre otros. Podras insertar en cada orden de pedido de tus cliente el código de seguimiento o tracking de empresas de encomiendas Venezolanas y actualizar el estado manualmente.' ),
 				'id'   => WC_ENVIOS_VE_DOMAIN 
 			),
 
@@ -244,13 +266,13 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
 
         echo sprintf('<input type="hidden" name="%s_nonce" value="%s" />',WC_ENVIOS_VE_DOMAIN, $nonce);
 
-        $get_order_notes = wc_get_order_notes([
+        /*$get_order_notes = wc_get_order_notes([
             'order_id' => $order->get_id(),
             'type' => 'customer',
          ]);
         echo '<pre>';
         print_r($get_order_notes);
-        echo '</pre>';
+        echo '</pre>';*/
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -300,12 +322,19 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
         );
 
         $etiquetas = [];
+        $add_note = 0;
         foreach($campos as $index => $val){
-            $campo = $val['id'];
-            $label = $val['label'];
+            $campo = isset($val['id']) ? esc_attr($val['id']) : '';
+            $label = isset($val['label']) ? esc_attr($val['label']) : '';
             $variable = isset($_REQUEST[$campo]) ? sanitize_text_field($_REQUEST[$campo]) : '';
 
-            $order->update_meta_data($val, $variable);
+            $meta = $order->get_meta($campo);
+
+            if($meta !== $variable):
+
+            $order->update_meta_data($campo, $variable);
+            $add_note = 1;    
+            endif;
 
             $etiquetas[esc_attr($val['tag'])] = $variable;
         }
@@ -319,7 +348,9 @@ Class Class_Backend_WC_Tracking_Envios_Ve{
             array_values($etiquetas), 
             $msg);
 
+        if($add_note > 0):    
         $order->add_order_note($msg_note, true );
+        endif;
 
         $order->save();
 
