@@ -18,3 +18,9 @@ un boton para visualizar el status de su envio.
 ## Screenshots
 
 ![Screenshot](https://github.com/24hwww/woocommerce-tracking-envios-ve/blob/master/image-plugin-1.png)
+
+![Screenshot](https://github.com/24hwww/woocommerce-tracking-envios-ve/blob/master/image-plugin-2.png)
+
+## Shortcode
+
+Coloque este shortcode: ¨[wc_tracking_ve_consulta]¨ en la página donde desea mostrar un buscador de código de rastreo.
