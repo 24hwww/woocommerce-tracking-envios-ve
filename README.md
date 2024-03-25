@@ -17,3 +17,4 @@ un boton para visualizar el status de su envio.
 
 ## Screenshots
 
+![Screenshot](https://github.com/24hwww/woocommerce-tracking-envios-ve/blob/master/image-plugin-1.png)
